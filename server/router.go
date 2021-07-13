@@ -16,21 +16,25 @@ func InitRouter(engine *gin.Engine) {
 	engine.NoRoute(func(c *gin.Context) {
 		c.File(conf.Conf.Server.Static + "/index.html")
 	})
-	InitApiRouter(engine)
+	InitApiRouter(engine, conf.Conf.Server.Download)
 }
 
 // init api router
-func InitApiRouter(engine *gin.Engine) {
+func InitApiRouter(engine *gin.Engine, download bool) {
 	apiV2 := engine.Group("/api")
 	{
 		apiV2.GET("/info", controllers.Info)
 		apiV2.POST("/get", controllers.Get)
 		apiV2.POST("/path", controllers.Path)
-		apiV2.POST("/office_preview/:drive", controllers.OfficePreview)
-		apiV2.POST("/video_preview/:drive", controllers.VideoPreview)
 		apiV2.POST("/local_search", controllers.LocalSearch)
 		apiV2.POST("/global_search", controllers.GlobalSearch)
 		apiV2.POST("/rebuild", controllers.RebuildTree)
 	}
-	engine.GET("/d/*path", controllers.Down)
+
+	if download {
+		apiV2.POST("/office_preview/:drive", controllers.OfficePreview)
+		apiV2.POST("/video_preview/:drive", controllers.VideoPreview)
+		apiV2.POST("/video_preview_play_info/:drive", controllers.VideoPreviewPlayInfo)
+		engine.GET("/d/*path", controllers.Down)
+	}
 }

@@ -59,12 +59,13 @@ server:
   address: "0.0.0.0"
   port: "5244"
   search: true
+  download: true
   static: dist
   site_url: '*'
   password: password #用于重建目录
 ali_drive:
   api_url: https://api.aliyundrive.com/v2
-  max_files_count: 3000
+  max_files_count: 100
   drives:
   - refresh_token: xxx #refresh_token
     root_folder: root #根目录的file_id
